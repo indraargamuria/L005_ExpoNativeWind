@@ -1,13 +1,13 @@
 import { ScreenContent } from 'components/ScreenContent';
+import { Homepage } from 'components/Homepage';
 import { StatusBar } from 'expo-status-bar';
-
+import 'react-native-gesture-handler';
 import './global.css';
 
 export default function App() {
   return (
     <>
-      <ScreenContent title="Home" path="App.tsx" />
-      <StatusBar style="auto" />
+      <Homepage title='A' />
     </>
   );
 }
