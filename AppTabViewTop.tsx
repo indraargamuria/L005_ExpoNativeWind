@@ -4,7 +4,7 @@ import { View, useWindowDimensions } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import Chat from './components/Chat';
 import Status from './components/Status';
-import Call from './components/Call';
+import Call from './components/PendingPR';
 
 import './global.css';
 const renderScene = SceneMap({

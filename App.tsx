@@ -4,7 +4,7 @@ import { View, Text, useWindowDimensions, TouchableOpacity } from 'react-native'
 import { TabView } from 'react-native-tab-view';
 import Chat from './components/Chat';
 import Status from './components/Status';
-import Call from './components/Call';
+import PendingPR from './components/PendingPR';
 import PendingPO from './components/PendingPO';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
@@ -16,18 +16,15 @@ export default function App() {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: 'pendingPO', title: 'Pending PO' },
-    { key: 'status', title: 'Status' },
-    { key: 'call', title: 'Call' },
+    { key: 'pendingPR', title: 'Pending PR' },
   ]);
 
   const renderScene = ({ route }: any) => {
     switch (route.key) {
       case 'pendingPO':
         return <PendingPO isFocused={index === 0} />;
-      case 'status':
-        return <Status />;
-      case 'call':
-        return <Call />;
+      case 'pendingPR':
+        return <PendingPR />;
       default:
         return null;
     }

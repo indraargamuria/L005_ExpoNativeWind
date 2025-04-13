@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, RefreshControl } from 'react-native';
-import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
@@ -9,7 +9,7 @@ type Props = {
   isFocused: boolean;
 };
 
-const PendingPO = ({ isFocused }: Props) => {
+const PendingPOSingleAction = ({ isFocused }: Props) => {
   const [poData, setPoData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -18,9 +18,7 @@ const PendingPO = ({ isFocused }: Props) => {
   const [action, setAction] = useState<'Approve' | 'Reject' | null>(null);
   const [open, setOpen] = useState(false); // For controlling dropdown
   const [value, setValue] = useState<string | null>(null); // Selected value
-  const [refreshing, setRefreshing] = useState(false); // For controlling pull-to-refresh
 
-  // Fetch PO data
   const fetchPOData = async () => {
     setLoading(true);
     setError(null);
@@ -54,19 +52,11 @@ const PendingPO = ({ isFocused }: Props) => {
     }
   };
 
-  // UseEffect untuk memanggil API ketika komponen di-focus
   useEffect(() => {
     if (isFocused) {
       fetchPOData();
     }
   }, [isFocused]);
-
-  // Fungsi untuk menangani pull-to-refresh
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    await fetchPOData();
-    setRefreshing(false);
-  }, []);
 
   const renderItem = (item: any) => {
     const statusColors: { [key: string]: string } = {
@@ -103,12 +93,7 @@ const PendingPO = ({ isFocused }: Props) => {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50 p-4">
-      <ScrollView
-        className="flex-1"
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
+      <ScrollView className="flex-1">
         {loading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : error ? (
@@ -143,7 +128,7 @@ const PendingPO = ({ isFocused }: Props) => {
               setValue={setValue}
               placeholder="Select Action"
               containerStyle={{ marginBottom: 20 }}
-              onChangeValue={(val) => setAction(val as 'Approve' | 'Reject')}
+              onChangeValue={(val) => setAction(val as "Approve" | "Reject")}
             />
 
             {/* Buttons */}
@@ -191,4 +176,4 @@ const PendingPO = ({ isFocused }: Props) => {
   );
 };
 
-export default PendingPO;
+export default PendingPOSingleAction;
