@@ -67,7 +67,7 @@ export const Homepage = ({ title }: HomepageProps) => {
         <Text className="text-base text-gray-500">
           {item.Calculated_Purchaser} • {item.Calculated_OrderDate}
         </Text>
-        <Text className={`text-xs font-bold ${statusColors[item.Calculated_ApprovalStatus] || 'bg-gray-100 text-gray-700'} px-3 py-1 w-fit mt-2 rounded-full`}>
+        <Text className={`text-lg font-bold ${statusColors[item.Calculated_ApprovalStatus] || 'bg-gray-100 text-gray-700'} px-3 py-1 w-fit mt-2 rounded-full`}>
           {item.Calculated_ApprovalStatus}
         </Text>
       </View>

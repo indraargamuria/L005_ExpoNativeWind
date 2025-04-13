@@ -6,6 +6,7 @@ import Chat from './components/Chat';
 import Status from './components/Status';
 import Call from './components/Call';
 
+import './global.css';
 const renderScene = SceneMap({
   chat: Chat,
   status: Status,
