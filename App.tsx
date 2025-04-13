@@ -1,28 +1,37 @@
 // App.tsx
 import React, { useState } from 'react';
 import { View, Text, useWindowDimensions, TouchableOpacity } from 'react-native';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView } from 'react-native-tab-view';
 import Chat from './components/Chat';
 import Status from './components/Status';
 import Call from './components/Call';
+import PendingPO from './components/PendingPO';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
-import './global.css'; // pastiin path ini benar
-
-const renderScene = SceneMap({
-  chat: Chat,
-  status: Status,
-  call: Call,
-});
+import './global.css'; // pastiin path ini sesuai struktur kamu
 
 export default function App() {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: 'chat', title: 'Chat' },
+    { key: 'pendingPO', title: 'Pending PO' },
     { key: 'status', title: 'Status' },
     { key: 'call', title: 'Call' },
   ]);
+
+  const renderScene = ({ route }: any) => {
+    switch (route.key) {
+      case 'pendingPO':
+        return <PendingPO isFocused={index === 0} />;
+      case 'status':
+        return <Status />;
+      case 'call':
+        return <Call />;
+      default:
+        return null;
+    }
+  };
 
   const renderTabBar = () => (
     <View className="flex-row bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
@@ -51,9 +60,10 @@ export default function App() {
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
         swipeEnabled={true}
-        renderTabBar={() => null} // kita hide tab default
+        renderTabBar={() => null} // hide default tab bar
       />
       {renderTabBar()}
+      <Toast /> {/* <- tambahkan ini */}
     </SafeAreaView>
   );
 }

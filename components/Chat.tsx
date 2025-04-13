@@ -8,9 +8,9 @@ const Chat = () => {
     <SafeAreaView className="flex-1 bg-gray-50 p-4">
         <View className="flex-1  items-center justify-center bg-white dark:bg-gray-900">
             <Text className="text-lg text-gray-900 dark:text-white font-bold">🏠 Home Pageas</Text>
-            <Text className="text-gray-600 dark:text-gray-300">Welcome to the homepage!</Text>
+            <Text className="text-gray-600 dark:text-gray-300">Welcome to the a!</Text>
             <View className='w-40 items-center justify-center text-white h-40 bg-red-500'>
-                <Text className='text-white text-xl'>Hello World</Text>
+                <Text className='text-white text-xl'>Hello Wo</Text>
             </View>
         </View>
     </SafeAreaView>
