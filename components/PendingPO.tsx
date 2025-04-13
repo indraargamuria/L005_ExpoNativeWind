@@ -1,9 +1,9 @@
-// components/PendingPO.tsx
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 type Props = {
   isFocused: boolean;
@@ -13,6 +13,11 @@ const PendingPO = ({ isFocused }: Props) => {
   const [poData, setPoData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedPO, setSelectedPO] = useState<any | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [action, setAction] = useState<'Approve' | 'Reject' | null>(null);
+  const [open, setOpen] = useState(false); // For controlling dropdown
+  const [value, setValue] = useState<string | null>(null); // Selected value
 
   const fetchPOData = async () => {
     setLoading(true);
@@ -61,15 +66,28 @@ const PendingPO = ({ isFocused }: Props) => {
     };
 
     return (
-      <View key={item.RowIdent} className="bg-white rounded-lg px-4 py-3 mb-3 shadow-sm border border-gray-100">
-        <Text className="text-xl font-semibold text-gray-800">{item.Calculated_PONum}</Text>
+      <TouchableOpacity
+        key={item.RowIdent}
+        onPress={() => {
+          setSelectedPO(item);
+          setModalVisible(true);
+        }}
+        className="bg-white rounded-lg px-4 py-3 mb-3 shadow-sm border border-gray-100"
+      >
+        <Text className="text-xl font-semibold text-gray-800">
+          {item.Calculated_PONum}
+        </Text>
         <Text className="text-base text-gray-500">
           {item.Calculated_Purchaser} • {item.Calculated_OrderDate}
         </Text>
-        <Text className={`text-xs font-bold ${statusColors[item.Calculated_ApprovalStatus] || 'bg-gray-100 text-gray-700'} px-3 py-1 w-fit mt-2 rounded-full`}>
+        <Text
+          className={`text-xs font-bold ${
+            statusColors[item.Calculated_ApprovalStatus] || 'bg-gray-100 text-gray-700'
+          } px-3 py-1 w-fit mt-2 rounded-full`}
+        >
           {item.Calculated_ApprovalStatus}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -80,10 +98,80 @@ const PendingPO = ({ isFocused }: Props) => {
           <ActivityIndicator size="large" color="#0000ff" />
         ) : error ? (
           <Text className="text-red-500">{error}</Text>
+        ) : poData.length > 0 ? (
+          poData.map(renderItem)
         ) : (
-          poData.length > 0 ? poData.map(renderItem) : <Text>No data available</Text>
+          <Text>No data available</Text>
         )}
       </ScrollView>
+
+      {/* Modal */}
+      {modalVisible && selectedPO && (
+        <View className="absolute top-0 left-0 right-0 bottom-0 bg-black/40 items-center justify-center z-50">
+          <View className="bg-white w-[90%] rounded-2xl p-5 shadow-lg">
+            <Text className="text-lg font-bold text-gray-800 mb-2">
+              PO #{selectedPO.Calculated_PONum}
+            </Text>
+            <Text className="text-sm text-gray-600 mb-4">
+              Purchaser: {selectedPO.Calculated_Purchaser}
+            </Text>
+
+            {/* Dropdown for Action */}
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={[
+                { label: 'Approve', value: 'Approve' },
+                { label: 'Reject', value: 'Reject' },
+              ]}
+              setOpen={setOpen}
+              setValue={setValue}
+              placeholder="Select Action"
+              containerStyle={{ marginBottom: 20 }}
+              onChangeValue={(val) => setAction(val as "Approve" | "Reject")}
+            />
+
+            {/* Buttons */}
+            <View className="flex-row justify-between">
+              <TouchableOpacity
+                className="bg-blue-500 px-4 py-2 rounded-lg"
+                onPress={() => {
+                  if (action) {
+                    Toast.show({
+                      type: 'success',
+                      text1: `${action} submitted!`,
+                      text2: `PO #${selectedPO.Calculated_PONum}`,
+                      position: 'top',
+                    });
+                    setModalVisible(false);
+                    setAction(null);
+                    setValue(null); // Reset dropdown after submit
+                  } else {
+                    Toast.show({
+                      type: 'info',
+                      text1: 'No action selected',
+                      text2: 'Please choose Approve or Reject',
+                      position: 'top',
+                    });
+                  }
+                }}
+              >
+                <Text className="text-white font-semibold">Submit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className="bg-gray-300 px-4 py-2 rounded-lg"
+                onPress={() => {
+                  setModalVisible(false);
+                  setAction(null);
+                  setValue(null); // Reset dropdown when cancelled
+                }}
+              >
+                <Text className="text-gray-800 font-semibold">Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
