@@ -39,7 +39,7 @@ const PendingPO = ({ isFocused }: Props) => {
       Toast.show({
         type: 'error',
         text1: 'Fetch Failed',
-        text2: 'Check your connections or API credentials.',
+        text2: 'Check your connection or API credentials.',
         position: 'top',
       });
     } finally {
