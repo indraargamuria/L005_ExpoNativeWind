@@ -171,7 +171,7 @@ const PendingPO = ({ isFocused }: Props) => {
                   }
                 }}
               >
-                <Text className="text-white font-semibold">Submit</Text>
+                <Text className="text-white font-semibold">Process</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 className="bg-gray-300 px-4 py-2 rounded-lg"
