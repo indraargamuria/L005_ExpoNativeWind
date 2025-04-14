@@ -125,7 +125,7 @@ const PendingPO = ({ isFocused }: Props) => {
         <View className="absolute top-0 left-0 right-0 bottom-0 bg-black/40 items-center justify-center z-50">
           <View className="bg-white w-[90%] rounded-2xl p-5 shadow-lg">
             <Text className="text-lg font-bold text-gray-800 mb-2">
-              PO #{selectedPO.Calculated_PONum}
+              PO No.{selectedPO.Calculated_PONum}
             </Text>
             <Text className="text-sm text-gray-600 mb-4">
               Purchaser: {selectedPO.Calculated_Purchaser}
